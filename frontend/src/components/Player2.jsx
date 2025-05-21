@@ -3,18 +3,12 @@ import { usePlayerMoves } from './PlayerMovesContext';
 import { Button } from './ui/button'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from './ui/select'
 import React, { useEffect, useState } from 'react'
+import { emojiCategories } from './utils/gameConstants';
 
 const Player2 = () => {
   const [selectedcategory, setSelectedCategory] = useState("");
   const [ready, setReady] = useState(false);
   const { playersCategory, setPlayersCategory } = useCategory();
-  const emojiCategories = {
-      Animals: ["🐶", "🐱", "🐵", "🐰"],
-      Food: ["🍕", "🍟", "🍔", "🍩"],
-      Sports: ["⚽", "🏀", "🏈", "🎾"],
-      Faces: ["😄", "😎", "😡", "😭"],
-      Weather: ["☀️", "🌧️", "🌩️", "❄️"],
-  };
   const {PlayerMoves, setPlayerMoves} = usePlayerMoves();
 
   return (
@@ -25,14 +19,14 @@ const Player2 = () => {
           <div className='bg-[#cdc1b4] flex items-center justify-center text-7xl w-[107px] h-[107px] hover:cursor-pointer rounded-md'>{PlayerMoves[2]}</div>
         : 
         <div className='flex flex-col gap-10 items-center w-full'>
-          <Select onValueChange={(cat)=>setSelectedCategory(cat)}>
+          <Select disabled={!playersCategory[1]} onValueChange={(cat)=>setSelectedCategory(cat)}>
             <SelectTrigger className="w-[180px] bg-transparent text-sm px-3 py-2 rounded-md focus-visible:ring-2 focus-visible:ring-rin">
               <SelectValue placeholder="Select a Category" />
             </SelectTrigger>
             <SelectContent className=" bg-[#f8f4ec]">
               <SelectGroup >
                 <SelectLabel >Categories</SelectLabel>
-                {Object.keys(emojiCategories).map((cat)=>(<SelectItem value={cat}>{cat}</SelectItem>))}
+                {Object.keys(emojiCategories).filter((cat)=>cat!=playersCategory[1]).map((cat)=>(<SelectItem value={cat}>{cat}</SelectItem>))}
               </SelectGroup>
             </SelectContent>
           </Select>

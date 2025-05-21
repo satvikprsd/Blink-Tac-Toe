@@ -4,9 +4,11 @@ const PlayerMoveContext = createContext();
 
 export const PlayerMoveProvider = ({ children }) => {
     const [PlayerMoves, setPlayerMoves] = useState({});
+    const [Player1Moves, setPlayer1Moves] = useState([]);
+    const [Player2Moves, setPlayer2Moves] = useState([]);
 
     return (
-        <PlayerMoveContext.Provider value={{ PlayerMoves, setPlayerMoves }}>
+        <PlayerMoveContext.Provider value={{ PlayerMoves, setPlayerMoves, Player1Moves, setPlayer1Moves, Player2Moves, setPlayer2Moves }}>
             {children}
         </PlayerMoveContext.Provider>
     );

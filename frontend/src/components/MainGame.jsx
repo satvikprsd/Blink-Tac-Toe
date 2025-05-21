@@ -3,27 +3,37 @@ import Player1 from './Player1';
 import Player2 from './Player2';
 import { useCategory } from './CategoryContext';
 import { usePlayerMoves } from './PlayerMovesContext';
+import { emojiCategories, winCombinations } from './utils/gameConstants';
+import { toast } from 'sonner';
 
 const MainGame = () => {
 
-const emojiCategories = {
-    Animals: ["🐶", "🐱", "🐵", "🐰"],
-    Food: ["🍕", "🍟", "🍔", "🍩"],
-    Sports: ["⚽", "🏀", "🏈", "🎾"],
-    Faces: ["😄", "😎", "😡", "😭"],
-    Weather: ["☀️", "🌧️", "🌩️", "❄️"],
-};
 const [MainBoard, setMainBoard] = useState(["", "", "", "", "", "", "", "", ""])
 const [turn, setTurn] = useState(0);
 const {playersCategory} = useCategory();
-const { PlayerMoves, setPlayerMoves } = usePlayerMoves();
+const { PlayerMoves, setPlayerMoves, Player1Moves, setPlayer1Moves, Player2Moves, setPlayer2Moves  } = usePlayerMoves();
   
 const MoveHandler = (cellClicked) => { 
-    const move = PlayerMoves[turn]
-    const newboard = MainBoard.map((cell,idx)=>idx == cellClicked ? move : cell)
-    setPlayerMoves({...PlayerMoves, [turn]: ''})
-    setMainBoard(newboard);
-    setTurn(3 - turn);
+    if (!!MainBoard[cellClicked]){
+      toast.error("Oops! There’s already a piece there.")
+    }
+    else{
+      const move = PlayerMoves[turn]
+      let newboard = MainBoard.map((cell,idx)=>idx == cellClicked ? move : cell)
+      let newmoves = turn == 1 ? Player1Moves : Player2Moves
+      newmoves.push([PlayerMoves[turn], cellClicked])
+      if (newmoves.length == 4) {
+        const index = newmoves.shift()[1];
+        newboard = newboard.map((cell,idx)=>idx!=index ? cell : '')
+      }
+      if (turn == 1) setPlayer1Moves(newmoves);
+      if (turn == 2) setPlayer2Moves(newmoves);
+      const moveIndexes = newmoves.map((moves)=>moves[1]).sort((a,b)=>a-b).join(',');
+      if (winCombinations.includes(moveIndexes)) toast.success(`Player ${turn} Wins`)
+      setPlayerMoves({...PlayerMoves, [turn]: ''})
+      setMainBoard(newboard);
+      setTurn(3 - turn);
+    }
   } 
 
   useEffect(()=>{

@@ -3,18 +3,12 @@ import { usePlayerMoves } from './PlayerMovesContext';
 import { Button } from './ui/button'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from './ui/select'
 import React, { useEffect, useState } from 'react'
+import { emojiCategories } from './utils/gameConstants';
 
 const Player1 = () => {
   const [selectedcategory, setSelectedCategory] = useState("");
   const [ready, setReady] = useState(false);
   const { playersCategory, setPlayersCategory } = useCategory();
-  const emojiCategories = {
-      Animals: ["🐶", "🐱", "🐵", "🐰"],
-      Food: ["🍕", "🍟", "🍔", "🍩"],
-      Sports: ["⚽", "🏀", "🏈", "🎾"],
-      Faces: ["😄", "😎", "😡", "😭"],
-      Weather: ["☀️", "🌧️", "🌩️", "❄️"],
-  };
   const {PlayerMoves, setPlayerMoves} = usePlayerMoves();
 
   return (

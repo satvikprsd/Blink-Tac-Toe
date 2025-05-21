@@ -5,6 +5,7 @@ import './App.css'
 import MainGame from './components/MainGame'
 import { CategoryProvider } from './components/CategoryContext'
 import { PlayerMoveProvider } from './components/PlayerMovesContext'
+import { Toaster } from './components/ui/sonner'
 
 function App() {
 
@@ -13,6 +14,7 @@ function App() {
       <PlayerMoveProvider>
         <CategoryProvider>
           <MainGame />
+          <Toaster />
         </CategoryProvider>
       </PlayerMoveProvider>
     </div>
