@@ -5,13 +5,15 @@ import { useCategory } from './CategoryContext';
 import { usePlayerMoves } from './PlayerMovesContext';
 import { emojiCategories, winCombinations } from './utils/gameConstants';
 import { toast } from 'sonner';
+import WiningAnimation from './WiningAnimation';
 
 const MainGame = () => {
 
 const [MainBoard, setMainBoard] = useState(["", "", "", "", "", "", "", "", ""])
 const [turn, setTurn] = useState(0);
-const {playersCategory} = useCategory();
-const { PlayerMoves, setPlayerMoves, Player1Moves, setPlayer1Moves, Player2Moves, setPlayer2Moves  } = usePlayerMoves();
+const {playersCategory, setPlayersCategory} = useCategory();
+const [isWin, setisWin] = useState(false);
+const { PlayerMoves, setPlayerMoves, Player1Moves, setPlayer1Moves, Player2Moves, setPlayer2Moves, setPlayersReady } = usePlayerMoves();
   
 const MoveHandler = (cellClicked) => { 
     if (!!MainBoard[cellClicked]){
@@ -29,12 +31,24 @@ const MoveHandler = (cellClicked) => {
       if (turn == 1) setPlayer1Moves(newmoves);
       if (turn == 2) setPlayer2Moves(newmoves);
       const moveIndexes = newmoves.map((moves)=>moves[1]).sort((a,b)=>a-b).join(',');
-      if (winCombinations.includes(moveIndexes)) toast.success(`Player ${turn} Wins`)
+      const isWin = winCombinations.includes(moveIndexes)
+      setisWin(winCombinations.includes(moveIndexes));
       setPlayerMoves({...PlayerMoves, [turn]: ''})
       setMainBoard(newboard);
       setTurn(3 - turn);
     }
   } 
+
+  const Restart = () => {
+    setTurn(0);
+    setisWin(false);
+    setPlayerMoves({});
+    setPlayer1Moves([]);
+    setPlayer2Moves([]);
+    setPlayersCategory({});
+    setMainBoard(["", "", "", "", "", "", "", "", ""]);
+    setPlayersReady({1:false,2:false})
+  }
 
   useEffect(()=>{
     const player1move = turn == 1 ? playersCategory[1] ? emojiCategories[playersCategory[1]][Math.floor(Math.random()*4)] : '' : PlayerMoves[1]
@@ -51,6 +65,7 @@ const MoveHandler = (cellClicked) => {
 
   return (
     <div className='flex h-full justify-between items-center'>
+      {isWin && <WiningAnimation onRestart={()=>Restart()} winner={3-turn} />}
       <Player1 />
       <div className='h-full flex justify-center items-center'>
         <div className="grid grid-cols-3 grid-rows-3 gap-5 w-[401px] bg-[#bbada0] p-5 rounded-lg">

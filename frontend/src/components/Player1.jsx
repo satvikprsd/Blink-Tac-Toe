@@ -5,17 +5,22 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import React, { useEffect, useState } from 'react'
 import { emojiCategories } from './utils/gameConstants';
 
-const Player1 = () => {
+const Player1 = ({restart}) => {
   const [selectedcategory, setSelectedCategory] = useState("");
-  const [ready, setReady] = useState(false);
   const { playersCategory, setPlayersCategory } = useCategory();
-  const {PlayerMoves, setPlayerMoves} = usePlayerMoves();
+  const {PlayerMoves, setPlayerMoves, PlayersReady, setPlayersReady} = usePlayerMoves();
+
+  useEffect(()=>{
+    if(restart){
+
+    }
+  },[restart])
 
   return (
     <div className='flex flex-col bg-[#bbada0] w-[300px] h-[500px] mx-15 items-center gap-10 rounded-lg'>
       <p className='text-white text-5xl mt-5'>Player 1</p>
       {
-        ready ? 
+        PlayersReady[1] ? 
           <div className='bg-[#cdc1b4] flex items-center justify-center text-7xl w-[107px] h-[107px] hover:cursor-pointer rounded-md'>{PlayerMoves[1]}</div>
         : 
         <div className='flex flex-col gap-10 items-center w-full'>
@@ -37,7 +42,7 @@ const Player1 = () => {
                 (<div key={idx} className='bg-[#cdc1b4] flex items-center justify-center text-7xl w-full aspect-[1/1] hover:cursor-pointer rounded-md'>{cell}</div>)
               )}
           </div>
-          <Button onClick={()=>{setPlayersCategory({...playersCategory, 1:selectedcategory});setReady(true)}}>Ready</Button>
+          <Button onClick={()=>{setPlayersCategory({...playersCategory, 1:selectedcategory});setPlayersReady({...PlayersReady, 1:true});setSelectedCategory('')}}>Ready</Button>
         </div>
       }
     </div>

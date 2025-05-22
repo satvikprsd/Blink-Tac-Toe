@@ -7,15 +7,14 @@ import { emojiCategories } from './utils/gameConstants';
 
 const Player2 = () => {
   const [selectedcategory, setSelectedCategory] = useState("");
-  const [ready, setReady] = useState(false);
   const { playersCategory, setPlayersCategory } = useCategory();
-  const {PlayerMoves, setPlayerMoves} = usePlayerMoves();
+  const {PlayerMoves, setPlayerMoves, PlayersReady, setPlayersReady} = usePlayerMoves();
 
   return (
     <div className='flex flex-col bg-[#bbada0] w-[300px] h-[500px] mx-15 items-center gap-10 rounded-lg'>
       <p className='text-white text-5xl mt-5'>Player 2</p>
       {
-        ready ? 
+        PlayersReady[2] ? 
           <div className='bg-[#cdc1b4] flex items-center justify-center text-7xl w-[107px] h-[107px] hover:cursor-pointer rounded-md'>{PlayerMoves[2]}</div>
         : 
         <div className='flex flex-col gap-10 items-center w-full'>
@@ -37,7 +36,7 @@ const Player2 = () => {
                 (<div key={idx} className='bg-[#cdc1b4] flex items-center justify-center text-7xl w-full aspect-[1/1] hover:cursor-pointer rounded-md'>{cell}</div>)
               )}
           </div>
-          <Button disabled={!playersCategory[1]} onClick={()=>{setPlayersCategory({...playersCategory, 2:selectedcategory});setReady(true)}}>Ready</Button>
+          <Button disabled={!playersCategory[1]} onClick={()=>{setPlayersCategory({...playersCategory, 2:selectedcategory});setPlayersReady({...PlayersReady, 2:true});setSelectedCategory('')}}>Ready</Button>
         </div>
       }
     </div>
