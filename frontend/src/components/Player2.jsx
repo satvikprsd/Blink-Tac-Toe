@@ -13,7 +13,7 @@ const Player2 = () => {
 
   return (
     <div className='flex flex-col bg-[#bbada0] w-[300px] h-[500px] mx-15 items-center gap-10 rounded-lg'>
-      <p className='text-white text-5xl mt-5'>Player 2</p>
+      <p className='text-white text-4xl mt-5'>{playersCategory[2] ? `Team ${playersCategory[2]}` : 'Player 2'}</p>
       {
         PlayersReady[2] ? 
           <div className='flex flex-col items-center gap-5'>

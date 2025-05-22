@@ -19,7 +19,7 @@ const Player1 = ({restart}) => {
 
   return (
     <div className='flex flex-col bg-[#bbada0] w-[300px] h-[500px] mx-15 items-center gap-10 rounded-lg'>
-      <p className='text-white text-5xl mt-5'>Player 1</p>
+      <p className='text-white text-4xl mt-5'>{playersCategory[1] ? `Team ${playersCategory[1]}` : 'Player 1'}</p>
       {
         PlayersReady[1] ? 
           <div className='flex flex-col items-center gap-5'>

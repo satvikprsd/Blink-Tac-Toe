@@ -9,6 +9,7 @@ import WiningAnimation from './WiningAnimation';
 import { useMediaQuery } from 'react-responsive';
 import { motion, AnimatePresence } from 'framer-motion';
 import { moveSound } from './utils/sounds';
+import TopBar from './TopBar';
 
 const MainGame = () => {
 
@@ -74,8 +75,9 @@ const MoveHandler = (cellClicked) => {
   
   return (
     <div className='flex h-full justify-between items-center'>
+      <TopBar resest={(set)=>Restart(set)}/>
       <div>
-        <div>
+        <div className='pl-4'>
           {useMediaQuery({ query: '(max-width: 1280px)' }) ? (
             turn == 0 ? (
               !playersCategory[1] ? (
@@ -120,12 +122,12 @@ const MoveHandler = (cellClicked) => {
             </AnimatePresence>
         </div>
       </div>
-      <div className='hidden xl:block'>
+      <div className='hidden xl:block pr-4'>
           <motion.div key="player2" initial={{opacity: 0, x: -50, scale: 0.8}} animate={{opacity:1, x:0, scale:1}} transition={{duration: 0.6, type: 'spring', stiffness: 100}}>
                   <Player2 />
           </motion.div>
       </div>
-      {isWin && <WiningAnimation winner={turn} onRestart={(cat)=>Restart(cat)} />}
+      {isWin && <WiningAnimation winner={turn} onRestart={(cat)=>Restart(cat)} onBack={()=>Restart(true)} />}
     </div>
   )
 }
