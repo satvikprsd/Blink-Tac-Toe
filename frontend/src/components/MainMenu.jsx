@@ -33,7 +33,7 @@ export default function MainMenu({ onHTP}) {
         </motion.div>
         ) : (
           <motion.div className="flex flex-col space-y-4" key="options" initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.8 }} transition={{ duration: 0.2 }}>
-            <motion.button className="bg-[#d6b99e] hover:bg-[#bbada0] text-[#4d4d4d] px-8 py-4 text-xl font-semibold rounded-xl shadow-md transition-all" onClick={()=>{buttonSound.play();navigate('/game/local')}} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+            <motion.button className="bg-[#d6b99e] hover:bg-[#bbada0] text-[#4d4d4d] px-8 py-4 text-xl font-semibold rounded-xl shadow-md transition-all" onClick={()=>{buttonSound.play();navigate('/local')}} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               Local
             </motion.button>
             <motion.button className="bg-[#d6b99e] hover:bg-[#bbada0] text-[#4d4d4d] px-8 py-4 text-xl font-semibold rounded-xl shadow-md transition-all" onClick={()=>{buttonSound.play();onCreateRoom()}} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
