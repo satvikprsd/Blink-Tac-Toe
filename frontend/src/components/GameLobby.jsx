@@ -25,7 +25,7 @@ const GameLobby = () => {
   const [WinningMoves, setWinningMoves] = useState('');
   const [playersPresence, setPlayersPresence] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const { PlayerMoves, setPlayerMoves, Player1Moves, setPlayer1Moves,Player2Moves,setPlayer2Moves, setPlayersReady } = usePlayerMoves();
+  const { PlayerMoves, setPlayerMoves, Player1Moves, setPlayer1Moves,Player2Moves,setPlayer2Moves, setPlayersReady, setScore, Score } = usePlayerMoves();
 
   useEffect(() => {
     if (roomId) {
@@ -76,6 +76,7 @@ const GameLobby = () => {
       if (updatedGameState.player2Moves) {
         setPlayer2Moves(updatedGameState.player2Moves);
       }
+
       setIsLoading(false);
     };
     handleGameStateUpdate(gameState);
@@ -96,7 +97,7 @@ const GameLobby = () => {
     const isWin = winCombinations.includes(moveIndexes)
     if (isWin) setWinningMoves(moveIndexes);
     if (isWin) setIsWin(isWin);
-
+    if (isWin) setScore({...Score, [turn]:Score[turn]+1})
   }, [Player1Moves, Player2Moves]);
 
   const MoveHandler = (cellClicked) => {
@@ -127,6 +128,7 @@ const GameLobby = () => {
     makeMove({
       turn: 3 - turn,
       move,
+      Score,
       newBoard,
       playerNumber: turn,
       playerMoves: newMoves
@@ -147,7 +149,7 @@ const GameLobby = () => {
 
   return (
     <div className='flex flex-col h-full w-full'>
-      <div className='fixed bottom-5 right-5'>
+      <div className='fixed top-3 left-25'>
         <h2 className='text-xl font-bold'>Room: {roomId}</h2>
         <div className='flex items-center gap-2'>
           <span className={`w-3 h-3 rounded-full ${gameState.isConnected ? 'bg-green-500' : 'bg-red-500'}`}></span>
@@ -179,42 +181,40 @@ const GameLobby = () => {
         </div>
       )}
       
-      <div className='flex h-full justify-between items-center'>
+      <div className='flex flex-col-reverse sm:flex-row h-full justify-between items-center pb-20 sm:pb-0'>
             <TopBar resest={(set)=>Restart(set)}/>
-            <div>
-              <div className='pl-4'>
+              <div className=' pl-0 sm:pl-4 mb-0'>
                 {useMediaQuery({ query: '(max-width: 1280px)' }) ? (
                   turn == 0 ? (
                     !playersCategory[1] ? (
-                      <motion.div key="player1" initial={{opacity: 0, x: -50, scale: 0.8 }} animate={{ opacity: 1,x: 0, scale: 1 }} transition={{duration:0.6, type:'spring', stiffness:100 }}>
+                      <motion.div  className='flex justify-center' key="player1" initial={{opacity: 0, x: -50, scale: 0.8 }} animate={{ opacity: 1,x: 0, scale: 1 }} transition={{duration:0.6, type:'spring', stiffness:100 }}>
                         <OnlinePlayer1 />
                       </motion.div>
                     ) : (
-                      <motion.div key="player2" initial={{opacity: 0, x: -50, scale: 0.8}} animate={{opacity:1, x:0, scale:1}} transition={{duration: 0.6, type: 'spring', stiffness: 100}}>
+                      <motion.div  className='flex justify-center' key="player2" initial={{opacity: 0, x: -50, scale: 0.8}} animate={{opacity:1, x:0, scale:1}} transition={{duration: 0.6, type: 'spring', stiffness: 100}}>
                         <OnlinePlayer2 />
                       </motion.div>
                     )
                   ) : turn == 1 ? (
-                      <motion.div key="player1" initial={{opacity: 0, x: -50, scale: 0.8 }} animate={{ opacity: 1,x: 0, scale: 1 }} transition={{duration:0.6, type:'spring', stiffness:100 }}>
+                      <motion.div  className='flex justify-center' key="player1" initial={{opacity: 0, x: -50, scale: 0.8 }} animate={{ opacity: 1,x: 0, scale: 1 }} transition={{duration:0.6, type:'spring', stiffness:100 }}>
                         <OnlinePlayer1 />
                       </motion.div>
                   ) : (
-                    <motion.div key="player2" initial={{opacity: 0, x: -50, scale: 0.8}} animate={{opacity:1, x:0, scale:1}} transition={{duration: 0.6, type: 'spring', stiffness: 100}}>
+                    <motion.div  className='flex justify-center' key="player2" initial={{opacity: 0, x: -50, scale: 0.8}} animate={{opacity:1, x:0, scale:1}} transition={{duration: 0.6, type: 'spring', stiffness: 100}}>
                         <OnlinePlayer2 />
                     </motion.div>
                   )
                 ) : (
-                  <motion.div key="player1" initial={{opacity: 0, x: -50, scale: 0.8 }} animate={{ opacity: 1,x: 0, scale: 1 }} transition={{duration:0.6, type:'spring', stiffness:100 }}>
+                  <motion.div  className='flex justify-center' key="player1" initial={{opacity: 0, x: -50, scale: 0.8 }} animate={{ opacity: 1,x: 0, scale: 1 }} transition={{duration:0.6, type:'spring', stiffness:100 }}>
                         <OnlinePlayer1 />
                   </motion.div>
                 )}
               </div>  
-            </div>
             <div className='h-full flex justify-center items-center px-10'>
-              <div className="grid grid-cols-3 grid-rows-3 gap-5 w-[401px] bg-[#bbada0] p-5 rounded-lg">
+              <div className="grid grid-cols-3 grid-rows-3 gap-5 w-[301px] sm:w-[401px] bg-[#bbada0] p-5 rounded-lg">
                   <AnimatePresence>
                     {MainBoard.map((cell, idx) => (
-                      <motion.div  onClick={() => MoveHandler(idx)} className={`${isWin ? WinningMoves.split(',').includes(idx.toString()) ? 'bg-[#d6b99e]' : 'bg-[#cdc1b4]' : 'bg-[#cdc1b4]'} flex items-center justify-center text-7xl w-[107px] h-[107px] hover:cursor-pointer rounded-md hover:bg-[#d6b99e]`} key={idx} layout initial={{ opacity: 0, y: 50, scale: 0.8 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: -50, scale: 0.8 }} transition={{ delay: idx*0.05, type: 'spring', stiffness: 100, damping: 20 }} >
+                      <motion.div  onClick={() => MoveHandler(idx)} className={`${isWin ? WinningMoves.split(',').includes(idx.toString()) ? 'bg-[#d6b99e]' : 'bg-[#cdc1b4]' : 'bg-[#cdc1b4]'} flex items-center justify-center text-7xl w-[80px] h-[80px] sm:w-[107px] sm:h-[107px] hover:cursor-pointer rounded-md hover:bg-[#d6b99e]`} key={idx} layout initial={{ opacity: 0, y: 50, scale: 0.8 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: -50, scale: 0.8 }} transition={{ delay: idx*0.05, type: 'spring', stiffness: 100, damping: 20 }} >
                         <AnimatePresence mode="wait">
                           {cell && (
                             <motion.div key={cell+'-'+idx} initial={{ scale: 0.3, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.3, opacity: 0 }} transition={{ duration: 0.2, ease: 'easeOut' }}>
@@ -228,12 +228,12 @@ const GameLobby = () => {
               </div>
             </div>
             <div className='hidden xl:block pr-4'>
-                <motion.div key="player2" initial={{opacity: 0, x: -50, scale: 0.8}} animate={{opacity:1, x:0, scale:1}} transition={{duration: 0.6, type: 'spring', stiffness: 100}}>
+                <motion.div  className='flex justify-center' key="player2" initial={{opacity: 0, x: -50, scale: 0.8}} animate={{opacity:1, x:0, scale:1}} transition={{duration: 0.6, type: 'spring', stiffness: 100}}>
                         <OnlinePlayer2 />
                 </motion.div>
             </div>
             {isWin && <WiningAnimation winner={turn} onRestart={(cat)=>Restart(cat)} onBack={()=>Restart(true)} />}
-          </div>
+      </div>
     </div>
   );
 };

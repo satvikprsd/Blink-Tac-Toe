@@ -8,7 +8,7 @@ const SocketGameContext = createContext();
 
 export const SocketGameProvider = ({ children }) => {
     const { setPlayersCategory } = useCategory();
-    const { setPlayerMoves, setPlayer1Moves, setPlayer2Moves,setPlayersReady } = usePlayerMoves();
+    const { setPlayerMoves, setPlayer1Moves, setPlayer2Moves,setPlayersReady, Score } = usePlayerMoves();
 
     const [gameState, setGameState] = useState(
     {
@@ -23,7 +23,8 @@ export const SocketGameProvider = ({ children }) => {
         playerMoves: {1: '', 2: ''},
         player1Moves: [],
         player2Moves: [],
-        playersReady: {1: false, 2: false}
+        playersReady: {1: false, 2: false},
+        Score: {1:0, 2:0}
     });
 
         const updateGameState = useCallback((newState) => {
@@ -122,7 +123,7 @@ export const SocketGameProvider = ({ children }) => {
     const resetGame = useCallback((fullReset) => {
         if (!gameState.roomId) return false;
         
-        return socket.emit('game-reset', {roomId: gameState.roomId, fullReset});
+        return socket.emit('game-reset', {roomId: gameState.roomId, Score, fullReset});
     }, [gameState.roomId]);
     
     return (

@@ -16,7 +16,7 @@ export default function WiningAnimation({winner, onRestart, onBack}) {
   return (
     <div
       className="fixed inset-0 flex flex-col gap-10 items-center justify-center bg-black" style={{opacity: show ? 0.7 : 0, transition: "opacity 1s ease-in-out 0.5s"}}>
-      <h1 className={`text-white text-6xl md:text-8xl font-bold opacity-0 transform scale-90 transition-all duration-3000 ${show ? "opacity-100 scale-100" : "opacity-0 scale-90"}`}>
+      <h1 className={`text-white text-4xl sm:text-6xl md:text-8xl font-bold opacity-0 transform scale-90 transition-all duration-3000 ${show ? "opacity-100 scale-100" : "opacity-0 scale-90"}`}>
         {`Team ${playersCategory[winner]} Wins!`}
       </h1>
       <AnimatePresence>

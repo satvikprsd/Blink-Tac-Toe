@@ -9,9 +9,9 @@ const TopBar = ({resest}) => {
     const navigate = useNavigate();
     const location = useLocation();
   return (
-    <div className={`fixed top-0 left-0 flex ${location.pathname!='/' ? 'justify-between' : 'justify-end'} w-full pr-5 pl-3`}>
-        {location.pathname!='/' && <ArrowBigLeft onClick={()=>{buttonSound.play();navigate('/');resest(true)}} size={70} className='hover:cursor-pointer' />}
-        {Mute ? <VolumeX onClick={()=>{buttonSound.play();setMute(prev=>!prev)}} size={70} className='hover:cursor-pointer'/> : <Volume2 onClick={()=>{buttonSound.play();setMute(prev=>!prev)}} size={70} className='hover:cursor-pointer'/>}
+    <div className={`fixed top-0 left-0 flex ${location.pathname!='/' ? 'justify-between' : 'justify-end'} w-full pr-2 pl-0`}>
+        {location.pathname!='/' && <ArrowBigLeft onClick={()=>{buttonSound.play();navigate('/');resest(true)}} size={55} className='hover:cursor-pointer' />}
+        {Mute ? <VolumeX onClick={()=>{buttonSound.play();setMute(prev=>!prev)}} size={50} className='hover:cursor-pointer'/> : <Volume2 onClick={()=>{buttonSound.play();setMute(prev=>!prev)}} size={50} className='hover:cursor-pointer'/>}
     </div>
   )
 }

@@ -11,7 +11,7 @@ const HTPDialog = ({openHTP, setOpenHTP}) => {
                 <div className='w-full flex-1 text-center font-bold'>
                     <DialogTitle><h2 className="text-xl font-bold">🎮 How to Play Blink Tac Toe</h2></DialogTitle>
                 </div>
-                <XIcon onClick={()=>{buttonSound.play();setOpenHTP(false)}} className="absolute right-4 hover:cursor-pointer"/>  
+                <XIcon onClick={()=>{buttonSound.play();setOpenHTP(false)}} className="absolute right-2 hover:cursor-pointer"/>  
             </div>
             <hr className="border-t-2 p-0"/>
             <div className="text-center px-4 space-y-4">

@@ -17,7 +17,7 @@ export default function MainMenu({ onHTP}) {
   return (
     <div className="relative flex flex-col items-center justify-center h-screen bg-[#cdc1b4] text-[#4d4d4d]">
       <TopBar />
-      <motion.h1 className="text-6xl md:text-8xl font-extrabold tracking-wide text-[#4d351f] mb-8" initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1 }} style={{textShadow: '0 0 5px #bbada0, 0 0 15px #d6b99e, 0 0 25px #cdc1b4'}}>
+      <motion.h1 className="text-5xl md:text-8xl font-extrabold tracking-wide text-[#4d351f] mb-8" initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1 }} style={{textShadow: '0 0 5px #bbada0, 0 0 15px #d6b99e, 0 0 25px #cdc1b4'}}>
         Blink Tac Toe
       </motion.h1>
 

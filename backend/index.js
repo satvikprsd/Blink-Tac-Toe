@@ -54,7 +54,8 @@ io.on('connection', (socket) => {
                     },
                     player1Moves: [],
                     player2Moves: [],
-                    playersReady: {1: false, 2: false}
+                    playersReady: {1: false, 2: false},
+                    Score: {1:0, 2:0}
                 },
                 lastUpdated: Date.now()
             };
@@ -131,19 +132,20 @@ io.on('connection', (socket) => {
         socket.on('player-move', ({roomId,moveData}, callback) => {
         
             const room = rooms[roomId];
-            const { turn, playerNumber, playerMoves, newBoard } = moveData;
+            const { turn, playerNumber, playerMoves, newBoard, Score } = moveData;
             
             room.gameState.board = newBoard;
             room.gameState.turn = turn; 
             room.gameState[`player${playerNumber}Moves`] = playerMoves;
             room.gameState.playerMoves[playerNumber] = '';
             room.gameState.lastUpdated = Date.now();
+            room.gameState.Score = Score;
 
             io.to(roomId).emit('game-state-update', room.gameState);
 
         });
 
-        socket.on('game-reset', ({roomId, fullReset}, callback) => {
+        socket.on('game-reset', ({roomId, Score, fullReset}, callback) => {
             
             const room = rooms[roomId];
             
@@ -164,7 +166,7 @@ io.on('connection', (socket) => {
                 room.gameState.player2Moves = [];
                 room.gameState.turn = 3 - room.gameState.turn;
             }
-            
+            room.gameState.Score = Score;
             room.gameState.lastUpdated = Date.now();
 
             io.to(roomId).emit('game-state-update', room.gameState);

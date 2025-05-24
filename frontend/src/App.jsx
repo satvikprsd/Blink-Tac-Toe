@@ -24,7 +24,15 @@ function App() {
   useEffect(() => {
     bgMusic.play();
     bgMusic.fade(0, 0.2, 3000);
-    return () => bgMusic.stop();
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        bgMusic.pause();
+      } else {
+        bgMusic.play();
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => {bgMusic.stop();document.removeEventListener('visibilitychange', handleVisibilityChange);};
   }, []);
 
   useEffect(()=>{
