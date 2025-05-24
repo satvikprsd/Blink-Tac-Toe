@@ -34,7 +34,7 @@ const GameLobby = () => {
       toast.info(`Joining room: ${roomId}`);
     } else {
       const newRoomId = Math.random().toString(36).substring(2, 8);
-      navigate(`/lobby/${newRoomId}`);
+      navigate(`/game/${newRoomId}`);
     }
   }, [roomId]);
 

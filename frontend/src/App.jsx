@@ -17,7 +17,7 @@ function App() {
   const [openHTP, setOpenHTP ] = useState(false);
   const router = createBrowserRouter([
     {path: '/', element: <MainMenu onHTP={()=>setOpenHTP(true)} />},
-    {path: '/game/local', element: <MainGame />},
+    {path: '/local', element: <MainGame />},
     {path: '/game/:roomId', element: <GameLobby />}
   ])
 
