@@ -5,9 +5,11 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import React, { useEffect, useState } from 'react'
 import { emojiCategories } from './utils/gameConstants';
 import { moveSound } from './utils/sounds';
+import { useSocketGame } from './SocketGameContext';
 
-const Player1 = () => {
+const OnlinePlayer1 = () => {
   const [selectedcategory, setSelectedCategory] = useState("");
+  const { gameState, isConnected, selectCategory } = useSocketGame();
   const { playersCategory, setPlayersCategory } = useCategory();
   const {PlayerMoves, PlayersReady, setPlayersReady} = usePlayerMoves();
 
@@ -25,7 +27,7 @@ const Player1 = () => {
           </div>
         : 
         <div className='flex flex-col gap-10 items-center w-full'>
-          <Select onValueChange={(cat)=>{moveSound.play();setSelectedCategory(cat)}}>
+          <Select disabled={!isConnected || gameState.playerNumber != 1} onValueChange={(cat)=>{moveSound.play();setSelectedCategory(cat)}}>
             <SelectTrigger className="w-[180px] bg-transparent text-sm px-3 py-2 rounded-md focus-visible:ring-2 focus-visible:ring-rin">
               <SelectValue placeholder="Select a Category" />
             </SelectTrigger>
@@ -43,11 +45,11 @@ const Player1 = () => {
                 (<div key={idx} className='bg-[#cdc1b4] flex items-center justify-center text-7xl w-full aspect-[1/1] rounded-md'>{cell}</div>)
               )}
           </div>
-          <Button onClick={()=>{setPlayersCategory({...playersCategory, 1:selectedcategory});setPlayersReady({...PlayersReady, 1:true});setSelectedCategory('');moveSound.play();}}>Ready</Button>
+          <Button disabled={!isConnected || gameState.playerNumber != 1} onClick={()=>{selectCategory(selectedcategory);setPlayersCategory({...playersCategory, 1:selectedcategory});setPlayersReady({...PlayersReady, 1:true});setSelectedCategory('');moveSound.play();}}>Ready</Button>
         </div>
       }
     </div>
   )
 }
 
-export default Player1
+export default OnlinePlayer1

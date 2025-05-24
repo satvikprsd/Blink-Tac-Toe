@@ -9,7 +9,7 @@ import { moveSound } from './utils/sounds';
 const Player2 = () => {
   const [selectedcategory, setSelectedCategory] = useState("");
   const { playersCategory, setPlayersCategory } = useCategory();
-  const {PlayerMoves, setPlayerMoves, PlayersReady, setPlayersReady} = usePlayerMoves();
+  const {PlayerMoves, PlayersReady, setPlayersReady} = usePlayerMoves();
 
   return (
     <div className='flex flex-col bg-[#bbada0] w-[300px] h-[500px] mx-15 items-center gap-10 rounded-lg'>

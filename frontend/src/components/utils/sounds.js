@@ -9,10 +9,12 @@ export const bgMusic = new Howl({
 
 export const buttonSound = new Howl({
   src: ['/sounds/button.mp3'],
-  volume: 0.5,
+  volume: 0.4,
+  preload: true,
 });
 
 export const moveSound = new Howl({
   src: ['/sounds/move.mp3'],
   volume: 1,
+  preload: true,
 })

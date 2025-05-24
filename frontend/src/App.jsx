@@ -1,6 +1,4 @@
 import { useEffect, useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
 import MainGame from './components/MainGame'
 import { CategoryProvider } from './components/CategoryContext'
@@ -8,12 +6,21 @@ import { PlayerMoveProvider } from './components/PlayerMovesContext'
 import { Toaster } from './components/ui/sonner'
 import MainMenu from './components/MainMenu'
 import { bgMusic } from './components/utils/sounds'
-import { useMenu } from './components/MenuContext'
+import { useAudio } from './components/AudioContext'
 import HTPDialog from './components/HTPDialog'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import GameLobby from './components/GameLobby'
+import SocketGameProvider from './components/SocketGameContext'
 
 function App() {
-  const { Menu, setMenu, Mute } = useMenu();
+  const { Mute } = useAudio();
   const [openHTP, setOpenHTP ] = useState(false);
+  const router = createBrowserRouter([
+    {path: '/', element: <MainMenu onHTP={()=>setOpenHTP(true)} />},
+    {path: '/game/local', element: <MainGame />},
+    {path: '/game/:roomId', element: <GameLobby />}
+  ])
+
   useEffect(() => {
     bgMusic.play();
     bgMusic.fade(0, 0.2, 3000);
@@ -27,14 +34,16 @@ function App() {
 
   return (
     <div className='w-screen h-screen bg-background'>
-      <PlayerMoveProvider>
-        <CategoryProvider>
-          <HTPDialog openHTP={openHTP} setOpenHTP={setOpenHTP} />
-            {Menu === 'menu' && <MainMenu onStartLocal={()=>setMenu('game')} onHTP={()=>setOpenHTP(true)} />}
-            {Menu === 'game' && <MainGame />}
-          <Toaster />
-        </CategoryProvider>
-      </PlayerMoveProvider>
+      
+        <PlayerMoveProvider>
+          <CategoryProvider>
+            <SocketGameProvider>
+            <HTPDialog openHTP={openHTP} setOpenHTP={setOpenHTP} />
+              <RouterProvider router={router}/>
+            <Toaster />
+            </SocketGameProvider>
+          </CategoryProvider>
+        </PlayerMoveProvider>
     </div>
   )
 }

@@ -5,34 +5,36 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import React, { useEffect, useState } from 'react'
 import { emojiCategories } from './utils/gameConstants';
 import { moveSound } from './utils/sounds';
+import { useSocketGame } from './SocketGameContext';
 
-const Player1 = () => {
+const OnlinePlayer2 = () => {
   const [selectedcategory, setSelectedCategory] = useState("");
+  const { gameState, isConnected, selectCategory } = useSocketGame();
   const { playersCategory, setPlayersCategory } = useCategory();
   const {PlayerMoves, PlayersReady, setPlayersReady} = usePlayerMoves();
 
   return (
     <div className='flex flex-col bg-[#bbada0] w-[300px] h-[500px] mx-15 items-center gap-10 rounded-lg'>
-      <p className='text-white text-4xl mt-5'>{playersCategory[1] ? `Team ${playersCategory[1]}` : 'Player 1'}</p>
+      <p className='text-white text-4xl mt-5'>{playersCategory[2] ? `Team ${playersCategory[1]}` : 'Player 2'}</p>
       {
-        PlayersReady[1] ? 
+        PlayersReady[2] ? 
           <div className='flex flex-col items-center gap-5'>
-            <div className='bg-[#cdc1b4] flex items-center justify-center text-7xl w-[107px] h-[107px] hover:cursor-pointer rounded-md'>{PlayerMoves[1]}</div>
+            <div className='bg-[#cdc1b4] flex items-center justify-center text-7xl w-[107px] h-[107px] hover:cursor-pointer rounded-md'>{PlayerMoves[2]}</div>
             <div className='grid grid-cols-2 grid-rows-2 gap-5 w-[90%] aspect-[1/1] p-5 mx-5 rounded-lg'>
-              {emojiCategories[playersCategory[1]].map((cell,idx)=>
+              {emojiCategories[playersCategory[2]].map((cell,idx)=>
                   (<div key={idx} className='bg-[#cdc1b4] flex items-center justify-center text-6xl w-full aspect-[1/1 rounded-md'>{cell}</div>))}
             </div>
           </div>
         : 
         <div className='flex flex-col gap-10 items-center w-full'>
-          <Select onValueChange={(cat)=>{moveSound.play();setSelectedCategory(cat)}}>
+          <Select disabled={!isConnected || gameState.playerNumber != 2 || !playersCategory[1]} onValueChange={(cat)=>{moveSound.play();setSelectedCategory(cat)}}>
             <SelectTrigger className="w-[180px] bg-transparent text-sm px-3 py-2 rounded-md focus-visible:ring-2 focus-visible:ring-rin">
               <SelectValue placeholder="Select a Category" />
             </SelectTrigger>
             <SelectContent className=" bg-[#f8f4ec]">
               <SelectGroup >
                 <SelectLabel >Categories</SelectLabel>
-                {Object.keys(emojiCategories).map((cat)=>(<SelectItem value={cat}>{cat}</SelectItem>))}
+                {Object.keys(emojiCategories).filter((cat)=>cat!=playersCategory[1]).map((cat)=>(<SelectItem value={cat}>{cat}</SelectItem>))}
               </SelectGroup>
             </SelectContent>
           </Select>
@@ -43,11 +45,11 @@ const Player1 = () => {
                 (<div key={idx} className='bg-[#cdc1b4] flex items-center justify-center text-7xl w-full aspect-[1/1] rounded-md'>{cell}</div>)
               )}
           </div>
-          <Button onClick={()=>{setPlayersCategory({...playersCategory, 1:selectedcategory});setPlayersReady({...PlayersReady, 1:true});setSelectedCategory('');moveSound.play();}}>Ready</Button>
+          <Button disabled={!isConnected || gameState.playerNumber != 2 || !playersCategory[1]} onClick={()=>{selectCategory(selectedcategory);setPlayersCategory({...playersCategory, 2:selectedcategory});setPlayersReady({...PlayersReady, 2:true});setSelectedCategory('');moveSound.play();}}>Ready</Button>
         </div>
       }
     </div>
   )
 }
 
-export default Player1
+export default OnlinePlayer2
