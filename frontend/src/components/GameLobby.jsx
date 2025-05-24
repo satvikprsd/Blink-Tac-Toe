@@ -232,7 +232,7 @@ const GameLobby = () => {
                         <OnlinePlayer2 />
                 </motion.div>
             </div>
-            {isWin && <WiningAnimation winner={turn} onRestart={(cat)=>Restart(cat)} onBack={()=>Restart(true)} />}
+            {isWin && <WiningAnimation winner={3-turn} onRestart={(cat)=>Restart(cat)} onBack={()=>Restart(true)} />}
       </div>
     </div>
   );
