@@ -15,7 +15,7 @@ const About = ({openAbout, setOpenAbout}) => {
             </div>
             <hr className="border-t-2 p-0"/>
             <div className='w-full flex flex-col gap-3 justify-center items-center'>
-                <img className='w-100 rounded-full' src='https://media.licdn.com/dms/image/v2/D5603AQGkQAbUQWMrvw/profile-displayphoto-shrink_400_400/B56ZQzIDaGH0Ag-/0/1736024537153?e=1753920000&v=beta&t=yh2qK84-Qti19W-lHrMQ9bug7GGpt4J7_ZddFf4gsfQ' />
+                <img className='w-50 sm:w-100 rounded-full' src='https://media.licdn.com/dms/image/v2/D5603AQGkQAbUQWMrvw/profile-displayphoto-shrink_400_400/B56ZQzIDaGH0Ag-/0/1736024537153?e=1753920000&v=beta&t=yh2qK84-Qti19W-lHrMQ9bug7GGpt4J7_ZddFf4gsfQ' />
                 <h1 className='font-bold text-2xl'>Satvik Prasad</h1>
                 <div className="text-center px-4 space-y-4">
                     Passionate about technology with expertise in JavaScript, Python, and Robotics, recognized through various awards. Solved 200+ LeetCode problems, earning 2 medals, and constantly explore new technologies to solve real-world problems creatively.
