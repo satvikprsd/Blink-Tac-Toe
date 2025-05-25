@@ -72,7 +72,7 @@ export const SocketGameProvider = ({ children }) => {
         });
         
         socket.on('game-state-update', (updatedGameState) => {
-            console.log(updatedGameState)
+            // console.log(updatedGameState)
             updateGameState(updatedGameState);
         });
         
@@ -93,7 +93,7 @@ export const SocketGameProvider = ({ children }) => {
     }, []);
 
     const makeMove = useCallback((moveData) => {
-        console.log(moveData,'movedata')
+        // console.log(moveData,'movedata')
         if (!gameState.roomId) return false;
 
         const updatedBoard = moveData.newBoard;

@@ -3,7 +3,7 @@ import React, { createContext, useContext, useState } from "react";
 const AudioContext = createContext();
 
 export const AudioProvider = ({ children }) => {
-    const [Mute, setMute] = useState(false);
+    const [Mute, setMute] = useState(true);
     return (
         <AudioContext.Provider value={{ Mute, setMute }}>
             {children}

@@ -25,7 +25,7 @@ function App() {
 
   useEffect(() => {
     bgMusic.play();
-    bgMusic.fade(0, 0.2, 3000);
+    if(!Mute) bgMusic.fade(0, 0.2, 3000);
     const handleVisibilityChange = () => {
       if (document.hidden) {
         bgMusic.pause();

@@ -17,7 +17,7 @@ const OnlinePlayer2 = () => {
     <div className='flex sm:flex-col bg-[#bbada0] w-[300px] h-[250px] sm:w-[300px] sm:h-[500px] mx-0 sm:mx-15 items-center gap-10 rounded-lg'>
       {
         PlayersReady[2] ? 
-          <div className='flex sm:flex-col items-center w-full gap-5'>
+          <div className='flex sm:flex-col items-center w-full gap-5 mr-4 sm:mr-0'>
             <div className='flex flex-col items-center gap-0 sm:gap-10 ml-5 sm:ml-0'>
               <p className='text-white text-2xl sm:text-4xl mt-5'>{playersCategory[2] ? `Team ${playersCategory[2]} - ${Score[2]}` : 'Player 2'}</p>
               <div className='bg-[#cdc1b4] flex items-center justify-center text-7xl w-[107px] h-[107px] hover:cursor-pointer rounded-md'>{PlayerMoves[2]}</div>
@@ -28,8 +28,8 @@ const OnlinePlayer2 = () => {
               </div>
           </div>
         : 
-        <div className='flex sm:flex-col sm:gap-10 items-center w-full '>
-            <div className='flex flex-col gap-10 items-center w-full ml-4 sm:ml-0'>
+        <div className='flex sm:flex-col sm:gap-10 items-center w-full mr-4 sm:mr-0'>
+            <div className='flex flex-col gap-10 items-center w-[50%] mx-4 sm:w-[100%] sm:mx-0'>
               <p className='text-white text-2xl sm:text-4xl mt-5'>{playersCategory[2] ? `Team ${playersCategory[2]} - ${Score[2]}` : 'Player 2'}</p>
               <Select disabled={!isConnected || gameState.playerNumber != 2 || !playersCategory[1]} onValueChange={(cat)=>{moveSound.play();setSelectedCategory(cat)}}>
                 <SelectTrigger className="w-[100px] sm:w-[180px] bg-transparent text-sm px-3 py-2 rounded-md focus-visible:ring-2 focus-visible:ring-rin">

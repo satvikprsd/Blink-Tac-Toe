@@ -53,7 +53,7 @@ const GameLobby = () => {
 
   useEffect(() => {
     const handleGameStateUpdate = (updatedGameState) => {
-      console.log(updatedGameState,'updated')
+      // console.log(updatedGameState,'updated')
       setMainBoard(updatedGameState.board);
       setTurn(updatedGameState.turn);
       
