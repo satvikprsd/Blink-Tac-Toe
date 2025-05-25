@@ -7,6 +7,8 @@ import { nanoid } from 'nanoid';
 
 export default function MainMenu({ onHTP}) {
   const [expanded, setExpanded] = useState(false);
+  const [join, setJoin] = useState(false);
+  const [joincode, setJoinCode] = useState('');
   const navigate = useNavigate();
 
   const onCreateRoom = () => {
@@ -39,7 +41,15 @@ export default function MainMenu({ onHTP}) {
             <motion.button className="bg-[#d6b99e] hover:bg-[#bbada0] text-[#4d4d4d] px-8 py-4 text-xl font-semibold rounded-xl shadow-md transition-all" onClick={()=>{buttonSound.play();onCreateRoom()}} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               Create Room
             </motion.button>
-            <motion.button className="bg-[#d6b99e] hover:bg-[#bbada0] text-[#4d4d4d] px-8 py-4 text-xl font-semibold rounded-xl shadow-md transition-all" onClick={()=>{buttonSound.play();setExpanded(false)}} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+            {!join ?
+            <motion.button className="bg-[#d6b99e] hover:bg-[#bbada0] text-[#4d4d4d] px-8 py-4 text-xl font-semibold rounded-xl shadow-md transition-all" onClick={()=>{buttonSound.play();setJoin(true)}} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              Join Room
+            </motion.button>
+            :
+            <motion.input value={joincode} onChange={(e)=>{setJoinCode(e.target.value)}} onKeyPress={(e)=>{if(e.key=="Enter") navigate(`/game/${joincode}`) }} autoFocus placeholder='Room Code' className="bg-[#d6b99e] text-center hover:bg-[#bbada0] text-[#4d4d4d] px-8 py-4 w-45 font-semibold rounded-xl shadow-md transition-all" onClick={()=>{buttonSound.play();onJoinRoom()}} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+
+            </motion.input>}
+            <motion.button className="bg-[#d6b99e] hover:bg-[#bbada0] text-[#4d4d4d] px-8 py-4 text-xl font-semibold rounded-xl shadow-md transition-all" onClick={()=>{buttonSound.play();setExpanded(false);setJoin(false);}} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               Back
             </motion.button>
           </motion.div>

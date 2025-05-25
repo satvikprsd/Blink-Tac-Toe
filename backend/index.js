@@ -132,7 +132,7 @@ io.on('connection', (socket) => {
         socket.on('player-move', ({roomId,moveData}, callback) => {
         
             const room = rooms[roomId];
-            const { turn, playerNumber, playerMoves, newBoard, Score } = moveData;
+            const { turn, playerNumber, playerMoves, newBoard, Score, isWin } = moveData;
             
             room.gameState.board = newBoard;
             room.gameState.turn = turn; 
@@ -143,6 +143,12 @@ io.on('connection', (socket) => {
 
             io.to(roomId).emit('game-state-update', room.gameState);
 
+        });
+
+        socket.on('on-win', ({roomId}) => {
+            const room = rooms[roomId];
+            room.gameState.isWin = true;
+            io.to(roomId).emit('game-state-update', room.gameState);
         });
 
         socket.on('game-reset', ({roomId, Score, fullReset}, callback) => {
@@ -168,6 +174,7 @@ io.on('connection', (socket) => {
             }
             room.gameState.Score = Score;
             room.gameState.lastUpdated = Date.now();
+            room.gameState.isWin = false;
 
             io.to(roomId).emit('game-state-update', room.gameState);
         });

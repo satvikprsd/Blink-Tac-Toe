@@ -46,9 +46,9 @@ function App() {
         <PlayerMoveProvider>
           <CategoryProvider>
             <SocketGameProvider>
-            <HTPDialog openHTP={openHTP} setOpenHTP={setOpenHTP} />
+              <HTPDialog openHTP={openHTP} setOpenHTP={setOpenHTP} />
               <RouterProvider router={router}/>
-            <Toaster />
+              <Toaster />
             </SocketGameProvider>
           </CategoryProvider>
         </PlayerMoveProvider>

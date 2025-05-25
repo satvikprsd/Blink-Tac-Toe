@@ -17,15 +17,14 @@ import { Button } from './ui/button';
 const GameLobby = () => {
   const { roomId } = useParams();
   const navigate = useNavigate();
-  const { gameState, joinRoom, makeMove, selectEmoji, resetGame, socket } = useSocketGame();
+  const { gameState, joinRoom, makeMove, selectEmoji, onWin, resetGame, socket } = useSocketGame();
   const [MainBoard, setMainBoard] = useState(["", "", "", "", "", "", "", "", ""]);
   const [turn, setTurn] = useState(0);
   const { playersCategory, setPlayersCategory } = useCategory();
-  const [isWin, setIsWin] = useState(false);
   const [WinningMoves, setWinningMoves] = useState('');
   const [playersPresence, setPlayersPresence] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const { PlayerMoves, setPlayerMoves, Player1Moves, setPlayer1Moves,Player2Moves,setPlayer2Moves, setPlayersReady, setScore, Score } = usePlayerMoves();
+  const { PlayerMoves, setPlayerMoves, Player1Moves, setPlayer1Moves,Player2Moves,setPlayer2Moves, setPlayersReady, setScore, Score, isWin, setIsWin } = usePlayerMoves();
 
   useEffect(() => {
     if (roomId) {
@@ -36,6 +35,7 @@ const GameLobby = () => {
       const newRoomId = Math.random().toString(36).substring(2, 8);
       navigate(`/game/${newRoomId}`);
     }
+    setScore({1:0,2:0})
   }, [roomId]);
 
   useEffect(() => {
@@ -84,12 +84,22 @@ const GameLobby = () => {
 
 
   useEffect(()=>{
+    const timeout = setTimeout(()=>{if (turn && gameState.turn!=gameState.playerNumber) toast.info(`Waiting for Player ${turn} to move`, {duration: 2000})},5000)
     if (gameState.playerNumber == turn){
       const playermove = playersCategory[turn] ? emojiCategories[playersCategory[turn]][Math.floor(Math.random()*4)] : PlayerMoves[turn]
       selectEmoji(playermove);
     }
+    return ()=> clearTimeout(timeout);
   },[turn])
 
+  useEffect(()=>{
+    if (gameState.playerNumber == 2 && !playersCategory[1]) toast.info('Waiting for Player 1 to Select their Category')
+    if (gameState.playerNumber == 1 && playersCategory[1] && !playersCategory[2] && playersPresence.length==2) toast.info('Waiting for Player 2 to Select their Category')
+  }, [gameState.playerNumber,playersCategory[1],playersCategory[2], playersPresence.length])
+
+  useEffect(()=>{
+    toast.info(`Players: ${playersPresence.length}/2 ${playersPresence.length < 2 ? 'Waiting for players...' : ''}`)
+  },[playersPresence.length])
 
   useEffect(() => {
     let newmoves = turn == 1 ? Player1Moves : Player2Moves
@@ -98,6 +108,7 @@ const GameLobby = () => {
     if (isWin) setWinningMoves(moveIndexes);
     if (isWin) setIsWin(isWin);
     if (isWin) setScore({...Score, [turn]:Score[turn]+1})
+    if (isWin) onWin();
   }, [Player1Moves, Player2Moves]);
 
   const MoveHandler = (cellClicked) => {
@@ -129,6 +140,7 @@ const GameLobby = () => {
       turn: 3 - turn,
       move,
       Score,
+      isWin,
       newBoard,
       playerNumber: turn,
       playerMoves: newMoves
@@ -149,26 +161,9 @@ const GameLobby = () => {
 
   return (
     <div className='flex flex-col h-full w-full'>
-      <div className='fixed top-3 left-25'>
-        <h2 className='text-xl font-bold'>Room: {roomId}</h2>
-        <div className='flex items-center gap-2'>
-          <span className={`w-3 h-3 rounded-full ${gameState.isConnected ? 'bg-green-500' : 'bg-red-500'}`}></span>
-          <span>{gameState.isConnected ? 'Connected' : 'Disconnected'}</span>
-          {gameState.role && <span className='ml-2'>({gameState.role})</span>}
-        </div>
-      </div>
       <div className='w-30 fixed bottom-5 left-5 flex gap-2'>
         <Button className="hover:cursor-pointer" size="sm" onClick={copyRoomLink}>Copy Room Link</Button>
         <Button size="sm" onClick={() => Restart(true)} variant="outline">Reset Game</Button>
-      </div>
-
-      <div className='p-2 text-center'>
-        <p>
-          Players: {playersPresence.length}/2
-          {playersPresence.length < 2 && 
-            <span className='text-yellow-600 ml-2'>Waiting for players...</span>
-          }
-        </p>
       </div>
 
       {isLoading && (
@@ -182,7 +177,7 @@ const GameLobby = () => {
       )}
       
       <div className='flex flex-col-reverse sm:flex-row h-full justify-between items-center pb-20 sm:pb-0'>
-            <TopBar resest={(set)=>Restart(set)}/>
+            <TopBar roomId={roomId} isConnected={gameState.isConnected} role={gameState.role} resest={(set)=>Restart(set)}/>
               <div className=' pl-0 sm:pl-4 mb-0'>
                 {useMediaQuery({ query: '(max-width: 1280px)' }) ? (
                   turn == 0 ? (

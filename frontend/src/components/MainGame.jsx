@@ -16,9 +16,8 @@ const MainGame = () => {
 const [MainBoard, setMainBoard] = useState(["", "", "", "", "", "", "", "", ""])
 const [turn, setTurn] = useState(0);
 const {playersCategory, setPlayersCategory} = useCategory();
-const [isWin, setisWin] = useState(false);
 const [WinningMoves, setwinningMoves] = useState('');
-const { PlayerMoves, setPlayerMoves, Player1Moves, setPlayer1Moves, Player2Moves, setPlayer2Moves, setPlayersReady, setScore, Score } = usePlayerMoves();
+const { PlayerMoves, setPlayerMoves, Player1Moves, setPlayer1Moves, Player2Moves, setPlayer2Moves, setPlayersReady, setScore, Score, isWin, setIsWin } = usePlayerMoves();
   
 const MoveHandler = (cellClicked) => { 
     if (!turn) {
@@ -43,7 +42,7 @@ const MoveHandler = (cellClicked) => {
       const isWin = winCombinations.includes(moveIndexes)
       if (isWin) setwinningMoves(moveIndexes);
       if (isWin) setScore({...Score, [turn]:Score[turn]+1})
-      setisWin(isWin);
+      setIsWin(isWin);
       setPlayerMoves({...PlayerMoves, [turn]: ''})
       setMainBoard(newboard);
       if (!isWin) setTurn(3 - turn);
@@ -51,7 +50,7 @@ const MoveHandler = (cellClicked) => {
   } 
 
   const Restart = (catCheck) => {
-    setisWin(false);
+    setIsWin(false);
     setPlayerMoves({});
     setPlayer1Moves([]);
     setPlayer2Moves([]);

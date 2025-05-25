@@ -3,12 +3,14 @@ import { useEffect, useState } from "react";
 import { buttonSound } from "./utils/sounds";
 import { useCategory } from "./CategoryContext";
 import { useNavigate } from "react-router-dom";
+import { usePlayerMoves } from "./PlayerMovesContext";
 
 export default function WiningAnimation({winner, onRestart, onBack}) {
   const [show, setShow] = useState(false);
   const [split, setSplit] = useState(false);
   const navigate = useNavigate();
   const { playersCategory } = useCategory();
+  const {Score} = usePlayerMoves();
   useEffect(() => {
     setShow(true);
   }, []);
@@ -18,6 +20,7 @@ export default function WiningAnimation({winner, onRestart, onBack}) {
       className="fixed inset-0 flex flex-col gap-10 items-center justify-center bg-black" style={{opacity: show ? 0.7 : 0, transition: "opacity 1s ease-in-out 0.5s"}}>
       <h1 className={`text-white text-4xl sm:text-6xl md:text-8xl font-bold opacity-0 transform scale-90 transition-all duration-3000 ${show ? "opacity-100 scale-100" : "opacity-0 scale-90"}`}>
         {`Team ${playersCategory[winner]} Wins!`}
+        {`\t${Score[1]} - ${Score[2]}`}
       </h1>
       <AnimatePresence>
         {!split ? (

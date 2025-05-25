@@ -8,7 +8,7 @@ const SocketGameContext = createContext();
 
 export const SocketGameProvider = ({ children }) => {
     const { setPlayersCategory } = useCategory();
-    const { setPlayerMoves, setPlayer1Moves, setPlayer2Moves,setPlayersReady, Score } = usePlayerMoves();
+    const { setPlayerMoves, setPlayer1Moves, setPlayer2Moves,setPlayersReady, Score, setIsWin } = usePlayerMoves();
 
     const [gameState, setGameState] = useState(
     {
@@ -49,7 +49,11 @@ export const SocketGameProvider = ({ children }) => {
             if (newState.playersReady) {
                 setPlayersReady(newState.playersReady);
             }
-        }, [setPlayersCategory, setPlayerMoves, setPlayer1Moves, setPlayer2Moves, setPlayersReady]);
+
+            if(newState.isWin==false){
+                setIsWin(false)
+            }
+        }, [setPlayersCategory, setPlayerMoves, setPlayer1Moves, setPlayer2Moves, setPlayersReady, setIsWin]);
 
     useEffect(() => {
         socket.on('connect', () => {
@@ -120,14 +124,18 @@ export const SocketGameProvider = ({ children }) => {
         return socket.emit('emoji-select', {roomId: gameState.roomId,playerNumber: gameState.playerNumber,emoji});
     }, [gameState.roomId, gameState.playerNumber, gameState.playerMoves]);
 
+    const onWin = useCallback((()=>{
+        return socket.emit('on-win', {roomId: gameState.roomId});
+    }))
+
     const resetGame = useCallback((fullReset) => {
         if (!gameState.roomId) return false;
         
-        return socket.emit('game-reset', {roomId: gameState.roomId, Score, fullReset});
+        return socket.emit('game-reset', {roomId: gameState.roomId, playerNumber: gameState.playerNumber, Score, fullReset});
     }, [gameState.roomId]);
     
     return (
-        <SocketGameContext.Provider value={{ socket,gameState,joinRoom,makeMove,selectCategory,selectEmoji,resetGame,isConnected: gameState.isConnected,}}>
+        <SocketGameContext.Provider value={{ socket,gameState,joinRoom,makeMove,selectCategory,selectEmoji, onWin,resetGame,isConnected: gameState.isConnected,}}>
             {children}
         </SocketGameContext.Provider>
     );
