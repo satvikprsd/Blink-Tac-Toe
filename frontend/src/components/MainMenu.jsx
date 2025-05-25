@@ -5,7 +5,7 @@ import TopBar from './TopBar';
 import { useNavigate } from 'react-router-dom';
 import { nanoid } from 'nanoid';
 
-export default function MainMenu({ onHTP}) {
+export default function MainMenu({ onHTP, onAbout}) {
   const [expanded, setExpanded] = useState(false);
   const [join, setJoin] = useState(false);
   const [joincode, setJoinCode] = useState('');
@@ -31,6 +31,9 @@ export default function MainMenu({ onHTP}) {
             </motion.button>
             <motion.button  className="bg-[#d6b99e] hover:bg-[#bbada0] text-[#4d4d4d] px-8  py-4 text-xl font-semibold rounded-xl shadow-md transition-all" key="HTP" onClick={()=>{buttonSound.play();onHTP()}} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.8 }} transition={{ duration: 0.1 }}>
                 How to Play
+            </motion.button>
+            <motion.button  className="bg-[#d6b99e] hover:bg-[#bbada0] text-[#4d4d4d] px-8  py-4 text-xl font-semibold rounded-xl shadow-md transition-all" key="about" onClick={()=>{buttonSound.play();onAbout()}} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.8 }} transition={{ duration: 0.1 }}>
+                About Me
             </motion.button>
         </motion.div>
         ) : (

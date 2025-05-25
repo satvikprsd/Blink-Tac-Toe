@@ -11,12 +11,14 @@ import HTPDialog from './components/HTPDialog'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import GameLobby from './components/GameLobby'
 import SocketGameProvider from './components/SocketGameContext'
+import About from './components/About'
 
 function App() {
   const { Mute } = useAudio();
   const [openHTP, setOpenHTP ] = useState(false);
+  const [openAbout, setOpenAbout] = useState(false);
   const router = createBrowserRouter([
-    {path: '/', element: <MainMenu onHTP={()=>setOpenHTP(true)} />},
+    {path: '/', element: <MainMenu onHTP={()=>setOpenHTP(true)} onAbout={()=>setOpenAbout(true)}/>},
     {path: '/local', element: <MainGame />},
     {path: '/game/:roomId', element: <GameLobby />}
   ])
@@ -47,6 +49,7 @@ function App() {
           <CategoryProvider>
             <SocketGameProvider>
               <HTPDialog openHTP={openHTP} setOpenHTP={setOpenHTP} />
+              <About openAbout={openAbout} setOpenAbout={setOpenAbout} />
               <RouterProvider router={router}/>
               <Toaster />
             </SocketGameProvider>
