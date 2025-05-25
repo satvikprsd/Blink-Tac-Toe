@@ -24,7 +24,7 @@ const GameLobby = () => {
   const [WinningMoves, setWinningMoves] = useState('');
   const [playersPresence, setPlayersPresence] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const { PlayerMoves, setPlayerMoves, Player1Moves, setPlayer1Moves,Player2Moves,setPlayer2Moves, setPlayersReady, setScore, Score, isWin, setIsWin } = usePlayerMoves();
+  const { PlayerMoves, setPlayerMoves, Player1Moves, setPlayer1Moves,Player2Moves,setPlayer2Moves, setPlayersReady, setScore, Score, isWin, setIsWin, isLucky, setIsLucky } = usePlayerMoves();
 
   useEffect(() => {
     if (roomId) {
@@ -105,9 +105,12 @@ const GameLobby = () => {
     let newmoves = turn == 1 ? Player1Moves : Player2Moves
     const moveIndexes = newmoves.map((moves)=>moves[1]).sort((a,b)=>a-b).join(',');
     const isWin = winCombinations.includes(moveIndexes)
+    // The Chances of a lucky win is 0.595 (8/9C3 *1*1/4*1/4)
+    const isLucky = new Set(newmoves.map((moves)=>moves[0])).size === 1; 
+    if (isWin) setIsLucky(isLucky);
     if (isWin) setWinningMoves(moveIndexes);
     if (isWin) setIsWin(isWin);
-    if (isWin) setScore({...Score, [turn]:Score[turn]+1})
+    if (isWin) setScore({...Score, [turn]:Score[turn]+(isLucky ? 5 : 1)})
     if (isWin) onWin();
   }, [Player1Moves, Player2Moves]);
 
@@ -149,6 +152,7 @@ const GameLobby = () => {
 
   const Restart = (catCheck) => {
     setIsWin(false);
+    setIsLucky(false);
     setWinningMoves('');
     resetGame(catCheck);
   };

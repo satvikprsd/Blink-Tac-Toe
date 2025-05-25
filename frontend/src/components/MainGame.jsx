@@ -17,7 +17,7 @@ const [MainBoard, setMainBoard] = useState(["", "", "", "", "", "", "", "", ""])
 const [turn, setTurn] = useState(0);
 const {playersCategory, setPlayersCategory} = useCategory();
 const [WinningMoves, setwinningMoves] = useState('');
-const { PlayerMoves, setPlayerMoves, Player1Moves, setPlayer1Moves, Player2Moves, setPlayer2Moves, setPlayersReady, setScore, Score, isWin, setIsWin } = usePlayerMoves();
+const { PlayerMoves, setPlayerMoves, Player1Moves, setPlayer1Moves, Player2Moves, setPlayer2Moves, setPlayersReady, setScore, Score, isWin, setIsWin, isLucky, setIsLucky  } = usePlayerMoves();
   
 const MoveHandler = (cellClicked) => { 
     if (!turn) {
@@ -40,8 +40,10 @@ const MoveHandler = (cellClicked) => {
       if (turn == 2) setPlayer2Moves(newmoves);
       const moveIndexes = newmoves.map((moves)=>moves[1]).sort((a,b)=>a-b).join(',');
       const isWin = winCombinations.includes(moveIndexes)
+      const isLucky = new Set(newmoves.map((moves)=>moves[0])).size === 1; 
+      if (isWin) setIsLucky(isLucky);
       if (isWin) setwinningMoves(moveIndexes);
-      if (isWin) setScore({...Score, [turn]:Score[turn]+1})
+      if (isWin) setScore({...Score, [turn]:Score[turn]+(isLucky ? 5 : 1)})
       setIsWin(isWin);
       setPlayerMoves({...PlayerMoves, [turn]: ''})
       setMainBoard(newboard);
@@ -51,6 +53,7 @@ const MoveHandler = (cellClicked) => {
 
   const Restart = (catCheck) => {
     setIsWin(false);
+    setIsLucky(false);
     setPlayerMoves({});
     setPlayer1Moves([]);
     setPlayer2Moves([]);

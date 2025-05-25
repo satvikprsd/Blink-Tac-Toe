@@ -4,6 +4,9 @@ import { buttonSound } from "./utils/sounds";
 import { useCategory } from "./CategoryContext";
 import { useNavigate } from "react-router-dom";
 import { usePlayerMoves } from "./PlayerMovesContext";
+import ReactConfetti from "react-confetti";
+import { useWindowSize } from "@react-hook/window-size";
+import { toast } from "sonner";
 
 export default function WiningAnimation({winner, onRestart, onBack}) {
   const [show, setShow] = useState(false);
@@ -11,13 +14,17 @@ export default function WiningAnimation({winner, onRestart, onBack}) {
   const navigate = useNavigate();
   const { playersCategory } = useCategory();
   const {Score} = usePlayerMoves();
+  const {width, height} = useWindowSize();
+  const {isLucky} = usePlayerMoves();
+
+  if (isLucky) toast.success('You just hit a 1 in 168 chance win. Letss Goo 🤗🤗🤗')
   useEffect(() => {
     setShow(true);
   }, []);
 
   return (
-    <div
-      className="fixed inset-0 flex flex-col gap-10 items-center justify-center bg-black" style={{opacity: show ? 0.7 : 0, transition: "opacity 1s ease-in-out 0.5s"}}>
+    <div className="fixed inset-0 flex flex-col gap-10 items-center justify-center bg-black" style={{opacity: show ? 0.7 : 0, transition: "opacity 1s ease-in-out 0.5s"}}>
+      {isLucky && <ReactConfetti width={width} height={height} />}
       <h1 className={`text-white text-4xl sm:text-6xl md:text-8xl font-bold opacity-0 transform scale-90 transition-all duration-3000 ${show ? "opacity-100 scale-100" : "opacity-0 scale-90"}`}>
         {`Team ${playersCategory[winner]} Wins!`}
         {`\t${Score[1]} - ${Score[2]}`}
